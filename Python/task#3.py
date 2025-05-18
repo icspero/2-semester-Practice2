@@ -1,21 +1,47 @@
-# Расширенный алгоритм Евклида
-def extended_gcd(a, b):
-    if b == 0:
-        return a, 1, 0
-    g, x1, y1 = extended_gcd(b, a % b)
-    x = y1
-    y = x1 - (a // b) * y1
-    return g, x, y
+def gcd(a, p):
+    while p != 0:
+        r = a % p
+        a = p
+        p = r
+    return a
 
-# Расширенный алгоритм Евклида для нахождения обратного элемента: c^(-1) mod m = d
-def inverse(c, m):
-    g, x, y = extended_gcd(c, m)
-    if g != 1:
-        print("Обратного элемента не существует!")
-        return -1
-    return (x % m + m) % m
+def extended(a, m):
+    x1, x2 = 1, 0
+    y1, y2 = 0, 1
 
-c, m = map(int, input("Введите: c, m: ").split())
-inv = inverse(c, m)
-if inv != -1:
-    print(f"Обратный элемент для {c} по модулю {m} равен {inv}")
+    while m != 0:
+        q = a // m
+        r = a % m
+
+        tempx = x1
+        x1 = x2
+        x2 = tempx - q * x2
+
+        tempy = y1
+        y1 = y2
+        y2 = tempy - q * y2
+
+        a = m
+        m = r
+
+    return x1, y1
+
+def main():
+    while True:
+        c = int(input("Введите c: "))
+        m = int(input("Введите m: "))
+        
+        gcd_val = gcd(c, m)
+        if gcd_val != 1:
+            print("Решения нет, т.к. gcd(c, m) != 1")
+            return
+        else:
+            x, y = extended(c, m)
+            print(f"x = {x}, y = {y}")
+            if x < 0:
+                x = (x % m + m) % m
+            print(f"Обратный элемент для {c} по модулю {m} равен {x}!")
+        print()
+
+if __name__ == "__main__":
+    main()

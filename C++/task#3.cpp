@@ -1,45 +1,63 @@
 #include <iostream>
+
 using namespace std;
 
-// Расширенный алгоритм Евклида
-int extended_gcd(int a, int b, int &x, int &y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+int NOD(int a, int p) {
+    while (p != 0) {
+        int r = a % p;
+        a = p;
+        p = r;
     }
-    int x1, y1;
-    int d = extended_gcd(b, a % b, x1, y1);
-    
-    x = y1;
-    y = x1 - (a / b) * y1;
 
-    return d;
+    return a;
 }
 
-// Расширенный алгоритм Евклида для нахождения обратного элемента: c^(-1) mod m = d
-int inverse(int c, int m) {
-    int x, y;
-    int g = extended_gcd(c, m, x, y);
-    if (g != 1) {
-        cout << "Обратного элемента не существует!" << endl;
-        return -1;
+pair<int, int> extended(int a, int m) {
+    int x1 = 1, x2 = 0;
+    int y1 = 0, y2 = 1;
+
+    while (m != 0) {
+        int q = a / m;
+        int r = a % m;
+
+        int tempx = x1;
+        x1 = x2;
+        x2 = tempx - q * x2;
+
+        int tempy = y1;
+        y1 = y2;
+        y2 = tempy - q * y2;
+
+        a = m;
+        m = r;
     }
-    return (x % m + m) % m;
+
+    return {x1, y1};
 }
 
 int main() {
-    setlocale(LC_ALL, "ru");
-    
-    cout << endl;
+    while (true) {
+        int c, m;
+        cout << "Введите: c, m: ";
 
-    int c, m;
-    cout << "Введите: c, m: ";
+        cin >> c >> m;
 
-    cin >> c >> m;
+        int gcd = NOD(c, m);
 
-    int inv = inverse(c, m);
-    if (inv != -1) {
-        cout << "Обратный элемент для " << c << " по модулю " << m << " равен " << inv << endl;
+        if (gcd != 1) {
+            cout << "Решения нет, т.к. gcd(c, m) != 1" << endl;
+            return -1;
+        }
+        else {
+            pair<int, int> res = extended(c, m);
+            int x = res.first;
+            int y = res.second;
+            cout << "x = " << x << ", y = " << y << endl;
+            if (res.first < 0) {
+                x = (x % m + m) % m;
+            }
+            cout << "Обратный элемент для " << c << " по модулю " << m << " равен " << x  << "!" << endl;
+        }
+        cout << endl;
     }
 }

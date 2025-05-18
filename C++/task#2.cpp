@@ -1,45 +1,56 @@
 #include <iostream>
+#include <map>
+
 using namespace std;
 
-// Расширенный алгоритм Евклида
-int extended_gcd(int a, int b, int &x, int &y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+int NOD(int a, int p) {
+    while (p != 0) {
+        int r = a % p;
+        a = p;
+        p = r;
     }
-    int x1, y1;
-    int d = extended_gcd(b, a % b, x1, y1);
-    
-    x = y1;
-    y = x1 - (a / b) * y1;
 
-    return d;
+    return a;
 }
 
-// Обобщённый алгоритм Евклида для нахождения d, такого что c * d ≡ 1 (mod m)
-int generalizedAlgorithm(int c, int m) {
-    int x, y;
-    int g = extended_gcd(c, m, x, y);
-    if (g != 1) {
-        cout << "Решения нет, т.к. gcd(c, m) != 1" << endl;
-        return -1;
+int general(int a, int m) {
+    int x1 = 1, x2 = 0;
+
+    while (m != 0) {
+        int q = a / m;
+        int r = a % m;
+
+        int tempx = x1;
+        x1 = x2;
+        x2 = tempx - q * x2;
+
+        a = m;
+        m = r;
     }
-    return (x % m + m) % m; // Положительный остаток
+
+    return x1;
 }
 
 int main() {
-    setlocale(LC_ALL, "ru");
-    
-    cout << endl;
+    while (true) {
+        int c, m;
+        cout << "Введите: c, m: ";
 
-    int c, m;
-    cout << "Введите: c, m: ";
+        cin >> c >> m;
 
-    cin >> c >> m;
+        int gcd = NOD(c, m);
 
-    int inv = generalizedAlgorithm(c, m);
-    if (inv != -1) {
-        cout << "Выражение c*d mod m = 1 при d = " << inv << endl;
+        if (gcd != 1) {
+            cout << "Решения нет, т.к. gcd(c, m) != 1" << endl;
+        }
+        else {
+            int res = general(c, m);
+            cout << "x = " << res << endl;
+            if (res < 0) {
+                res = (res % m + m) % m;
+            }
+            cout << "Выражение c*d mod m = 1 при d = " << res << "!" << endl;
+        }
+        cout << endl;
     }
 }
