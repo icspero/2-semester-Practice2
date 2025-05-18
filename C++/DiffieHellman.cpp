@@ -4,10 +4,16 @@ using namespace std;
 
 int powmod(int a, int x, int p) {
     int res = 1;
-    for (int i = 1; i <= x; i++) {
-        res = res * a;
-        res = res % p;
+    a = a % p;
+
+    while (x > 0) {
+        if (x % 2 == 1) {
+            res = (res * a) % p;
+        }
+        a = (a * a) % p;
+        x = x / 2;
     }
+
     return res;
 }
 

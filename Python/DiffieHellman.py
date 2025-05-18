@@ -3,9 +3,12 @@ import random
 # Функция для вычисления степени по модулю
 def powmod(a, x, p):
     res = 1
-    for i in range(1, x + 1):
-        res = res * a
-        res = res % p
+    a = a % p
+    while x > 0:
+        if x % 2 == 1:
+            res = (res * a) % p
+        a = (a * a) % p
+        x //= 2
     return res
 
 # Функция шифрования

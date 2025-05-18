@@ -5,12 +5,13 @@ using namespace std;
 
 // Алгоритм Евклида(поиск НОД)
 int NOD(int a, int p) {
-    while (p != 0) { // пока остаток не будет равен 0
-        int r = p; // a и r переносят числа
-        p = a % p; // после первой итерации берем остаток от предыдущего делителя и остатка
-        a = r; // a%b=c >> b%c=d >> c%d=e
+    while (p != 0) {
+        int r = a % p;
+        a = p;
+        p = r;
     }
-    return a; // функция возвращает НОД
+
+    return a;
 }
 
 // Малая теорема Ферма
@@ -56,32 +57,18 @@ int alg_1(int a, int x, int p) {
 
 // Бинарное возведение в степень
 int alg_2(int a, int x, int p) {
-    if (mTeoremaFerma(a, p) != 1) {
-        return -1;
-    }
-    int size = log2(x); // вычисляем размер в двоичном виде - 1
-    vector<int> ost; // вектор остатков степени
-    vector<int> dv; // вектор двоичной записи числа степени
-    int temp; // временная переменная
-    for (int i = 0; i <= size; i++) {
-        temp = alg_1(a, int(pow(2, i)), p);
-        ost.push_back(temp); // вычисляем и записываем остаток  
-    }
+    int res = 1;
+    a = a % p;
 
-    int d;
-    while (x != 0) { // перевод в двоичный вид
-        d = x % 2;
+    while (x > 0) {
+        if (x % 2 == 1) {
+            res = (res * a) % p;
+        }
+        a = (a * a) % p;
         x = x / 2;
-        dv.push_back(d);
     }
 
-    int result = 1;
-    for (int i = 0; i <= size; i++) {
-        result = result * int(pow(ost[i], dv[i]));
-        result = result % p;
-    }
-
-    return result;
+    return res;
 }
 
 int main() {
