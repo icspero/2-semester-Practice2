@@ -33,16 +33,10 @@ int mTeoremaFerma(int a, int p) {
 
 // Свойство сравнения 
 int svoSrav(int a, int x, int p) {
-    int b = 1;
-    for (int i = 0; i < x; i++) { // a^x mod p = b >> a^x = b mod p
-        b = (b * a) % p;
-    }
-    int c = b % p; // b mod p
-    if (b % p == c % p) // сравниваем остатки
-        return 1;
-    else {
-        return -1;
-    }
+    int left = alg_2(a, x, p); // (a^x) mod p
+    int a_mod = a % p;
+    int right = alg_2(a_mod, x, p); // ((a mod p)^x) mod p
+    return (left == right) ? 1 : -1;
 }
 
 // Модульное умножение

@@ -16,15 +16,11 @@ def mTeoremaFerma(a, p):
     else:
         return 0
 
-def svoSrav(a, x, p):
-    b = 1
-    for _ in range(x):
-        b = (b * a) % p
-    c = b % p
-    if b % p == c % p:
-        return 1
-    else:
-        return -1
+def svo_srav(a, x, p):
+    left = alg_2(a, x, p) # (a^x) mod p
+    a_mod = a % p
+    right = alg_2(a_mod, x, p) # ((a mod p)^x) mod p
+    return 1 if left == right else -1
 
 def alg_1(a, x, p):
     res = 1
