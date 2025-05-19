@@ -14,28 +14,30 @@ int powmod(int a, int x, int p) {
 
 vector<int> cycle(int a) {
     vector<int> ost;
-    int res = 1, k = 0, t;
-    for (int i = 0; i < 8; i++) {
-        res = res * a;
-        res = res % 10;
-        if (k == 0) {
-            ost.push_back(res);
-            k = 1;
-        }
-        t = 0;
-        for (int j = 0; j < ost.size(); j++) {
-            if (ost[j] == res) {
-                t = 1;
+    int res = 1;
+
+    while (true) {
+        res = (res * a) % 10;
+
+        // Проверяем, есть ли уже res в ost
+        bool found = false;
+        for (int val : ost) {
+            if (val == res) {
+                found = true;
+                break;
             }
         }
-        if (t != 1) {
-            ost.push_back(res);
+
+        if (found) {
+            // Цикл найден, прерываем цикл
+            break;
         }
+
+        ost.push_back(res);
     }
 
     return ost;
 }
-
 
 int main() {
     int a, b, c;
